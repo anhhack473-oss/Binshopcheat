@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d16"><title>Game Hub</title>
+<style>
+:root{--bg:#080d16;--panel:#121b2d;--line:#293650;--green:#00ed9a;--blue:#176cf5;--muted:#9eabc0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f5f7fb;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#101321;border-bottom:1px solid var(--line);padding:12px 15px;display:flex;align-items:center;gap:12px}
+.menu{background:#0c2825;color:var(--green);border:1px solid #00bd83;border-radius:15px;width:49px;height:49px;font-size:23px}
+.brand{font-size:21px;font-weight:800;flex:1}.brand small{display:block;color:var(--green);font-size:10px;letter-spacing:2px;margin-top:4px}
+button{cursor:pointer}.primary{border:0;background:var(--blue);color:white;border-radius:13px;padding:12px 15px;font-weight:700}
+main{max-width:950px;margin:auto;padding:22px 14px 55px;background-image:linear-gradient(#102a2820 1px,transparent 1px),linear-gradient(90deg,#102a2820 1px,transparent 1px);background-size:44px 44px}
+.top-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:17px}.top-actions button{flex:1;min-width:130px}
+.switch{display:flex;gap:5px;background:#121b2e;border:1px solid var(--line);border-radius:40px;padding:5px;margin:12px auto 18px;max-width:430px}
+.switch button{flex:1;border:0;border-radius:35px;padding:13px 5px;background:transparent;color:#aab5c8;font-weight:700}
+.switch button.active{background:var(--green);color:#06251c}
+.search{width:100%;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;color:white;font-size:16px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid #1d2942;border-radius:22px;overflow:hidden}
+.art{height:145px;display:grid;place-items:center;font-size:48px;position:relative;background:radial-gradient(circle at 50% 25%,#1b8068,#122a35 52%,#101323)}
+.art.purple{background:radial-gradient(circle at 50% 25%,#57408f,#202343 60%,#101323)}.art.orange{background:radial-gradient(circle at 50% 25%,#98572c,#36233a 60%,#101323)}.art.blue{background:radial-gradient(circle at 50% 25%,#246da5,#17354a 60%,#101323)}
+.tag{position:absolute;top:10px;left:9px;padding:6px 9px;border-radius:20px;background:#14865f;font-size:10px;font-weight:800}.tag.right{left:auto;right:9px;background:#00c985;color:#06251c}
+.body{padding:12px}.body h3{font-size:16px;margin:0 0 8px}.body p{font-size:12px;color:var(--muted);line-height:1.45;min-height:36px;margin:0 0 10px}
+.meta{display:flex;text-align:center;border-top:1px solid var(--line);padding-top:9px;color:var(--muted);font-size:11px}.meta div{flex:1}.meta div+div{border-left:1px solid #34405a}.meta b{display:block;color:var(--green);font-size:12px;margin-top:5px}
+.card-actions{display:flex;gap:7px;margin-top:12px}.card-actions button{flex:1;border:0;border-radius:30px;padding:10px 5px;color:white;font-weight:700;font-size:12px;background:var(--blue)}.card-actions .delete{background:#9e3448}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin:18px 0}.panel h2{font-size:18px;margin:0 0 13px}
+input,textarea,select{width:100%;padding:12px;margin:6px 0 11px;border-radius:11px;border:1px solid var(--line);background:#0b1322;color:white;font:inherit}
+textarea{min-height:75px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hidden{display:none!important}
+.notice{color:var(--muted);font-size:12px;line-height:1.5}.post{padding:12px 0;border-top:1px solid var(--line)}.post strong{color:var(--green)}footer{text-align:center;color:#78869f;font-size:12px;padding:28px 10px}
+.modal{position:fixed;inset:0;background:#000b;z-index:10;display:grid;place-items:center;padding:18px}.modal-box{max-width:390px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px}.modal-box h2{margin-top:0}
+@media(max-width:390px){.brand{font-size:18px}.grid{gap:9px}.art{height:118px}.body{padding:9px}.body h3{font-size:14px}.body p{font-size:11px}.card-actions button{font-size:11px}.top-actions button{font-size:12px}}
+</style></head>
+<body>
+<header><button class="menu" onclick="toggleMenu()">☰</button><div class="brand">🎮 Game Hub<small>GAME • GUIDE • COMMUNITY</small></div><button class="primary" id="loginBtn" onclick="openLogin()">↪ Đăng nhập</button></header>
+<main>
+<div class="top-actions hidden" id="menuActions"><button class="primary" onclick="showSection('catalog')">Kho nội dung</button><button class="primary" onclick="showSection('posts')">Bài đăng</button><button class="primary" onclick="showSection('manage')">Quản lý</button></div>
+<section id="catalog">
+<div class="switch" id="platform"><button class="active">☄ Android</button><button> iOS</button></div>
+<input class="search" id="search" placeholder="⌕  Tìm kiếm nội dung...">
+<div class="switch" id="type"><button class="active" data-value="Tất cả">Tất cả</button><button data-value="No Root">No Root</button><button data-value="Root">Root</button></div>
+<div class="grid" id="cards"></div>
+</section>
+<section id="posts" class="panel hidden"><h2>📝 Bài đăng cộng đồng</h2><div id="postList"></div><p class="notice">Đăng bài mẫu được lưu trên thiết bị hiện tại.</p><textarea id="postText" placeholder="Chia sẻ mẹo chơi game hoặc đặt câu hỏi..."></textarea><button class="primary" onclick="addPost()">Đăng bài</button></section>
+<section id="manage" class="panel hidden"><h2>🛠️ Quản lý nội dung</h2><p class="notice">Bản demo cho phép thêm nội dung ngay trên thiết bị này. Chưa có máy chủ hay tài khoản quản trị thật.</p>
+<form id="itemForm"><input id="itemName" placeholder="Tên nội dung" required><textarea id="itemDesc" placeholder="Mô tả ngắn" required></textarea><div class="form-grid"><select id="itemType"><option>No Root</option><option>Root</option></select><select id="itemPlatform"><option>Android</option><option>iOS</option><option>Android / iOS</option></select></div><button class="primary" type="submit">＋ Thêm nội dung</button></form>
+</section>
+<footer>© 2026 Game Hub · Giao diện demo</footer>
+</main>
+<div id="loginModal" class="modal hidden"><div class="modal-box"><h2>Đăng nhập demo</h2><p class="notice">Nhập biệt danh để dùng thử giao diện. Không nhập mật khẩu thật.</p><input id="nickname" placeholder="Biệt danh của bạn"><button class="primary" onclick="login()">Tiếp tục</button> <button class="primary" style="background:#39445a" onclick="closeLogin()">Đóng</button></div></div>
+<script>
+const defaults=[
+{name:'Hướng dẫn tối ưu game',desc:'Gợi ý cài đặt đồ họa và cải thiện trải nghiệm chơi game.',type:'No Root',platform:'Android',emoji:'🎮',theme:''},
+{name:'Mẹo điều khiển',desc:'Tham khảo cách tùy chỉnh nút bấm và bố cục điều khiển.',type:'No Root',platform:'Android',emoji:'🎯',theme:'purple'},
+{name:'Kiến thức Android',desc:'Tìm hiểu quyền hệ thống và các lưu ý an toàn cho thiết bị.',type:'Root',platform:'Android',emoji:'⚙️',theme:'orange'},
+{name:'Cộng đồng game',desc:'Chia sẻ kinh nghiệm, hỏi đáp và kết nối người chơi.',type:'No Root',platform:'Android / iOS',emoji:'💬',theme:'blue'}
+];
+let items=JSON.parse(localStorage.getItem('gh_items')||'null')||defaults;
+let posts=JSON.parse(localStorage.getItem('gh_posts')||'[]'), filter='Tất cả', platform='Android', user=localStorage.getItem('gh_user')||'';
+function save(){localStorage.setItem('gh_items',JSON.stringify(items));localStorage.setItem('gh_posts',JSON.stringify(posts))}
+function render(){
+ const q=document.getElementById('search').value.toLowerCase();
+ document.getElementById('cards').innerHTML=items.map((x,i)=>({x,i})).filter(({x})=>(filter==='Tất cả'||x.type===filter)&&(x.name+' '+x.desc).toLowerCase().includes(q)&&(platform==='Android'?x.platform!=='iOS':x.platform!=='Android')).map(({x,i})=>`<article class="card"><div class="art ${x.theme||''}"><span class="tag">${x.type.toUpperCase()}</span><span class="tag right">CÓ SẴN</span>${x.emoji||'🎮'}</div><div class="body"><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p><div class="meta"><div>Nền tảng<b>${esc(x.platform)}</b></div><div>Danh mục<b>${esc(x.type)}</b></div></div><div class="card-actions"><button onclick="alert('${esc(x.name).replace(/'/g,"\\'")}')">Chi tiết</button><button class="delete" onclick="removeItem(${i})">Xóa</button></div></div></article>`).join('')||'<p class="notice">Không tìm thấy nội dung.</p>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('search').addEventListener('input',render);
+document.querySelectorAll('#type button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#type button').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.value;render()});
+document.querySelectorAll('#platform button').forEach((b,i)=>b.onclick=()=>{document.querySelectorAll('#platform button').forEach(x=>x.classList.remove('active'));b.classList.add('active');platform=i?'iOS':'Android';render()});
+function removeItem(i){if(confirm('Xóa nội dung này?')){items.splice(i,1);save();render()}}
+document.getElementById('itemForm').onsubmit=e=>{e.preventDefault();items.unshift({name:itemName.value,desc:itemDesc.value,type:itemType.value,platform:itemPlatform.value,emoji:'🎮',theme:'blue'});save();e.target.reset();render();alert('Đã thêm vào danh sách trên thiết bị này.')};
+function addPost(){if(!user){openLogin();return}let v=postText.value.trim();if(!v)return;posts.unshift({user,text:v,date:new Date().toLocaleString('vi-VN')});postText.value='';save();renderPosts()}
+function renderPosts(){document.getElementById('postList').innerHTML=posts.map(p=>`<div class="post"><strong>${esc(p.user)}</strong> <span class="notice">· ${esc(p.date)}</span><p>${esc(p.text)}</p></div>`).join('')||'<p class="notice">Chưa có bài đăng nào.</p>'}
+function showSection(id){['catalog','posts','manage'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));document.getElementById('menuActions').classList.add('hidden');if(id==='posts')renderPosts()}
+function toggleMenu(){document.getElementById('menuActions').classList.toggle('hidden')}
+function openLogin(){document.getElementById('loginModal').classList.remove('hidden')}function closeLogin(){document.getElementById('loginModal').classList.add('hidden')}
+function login(){let n=document.getElementById('nickname').value.trim();if(!n)return;user=n;localStorage.setItem('gh_user',user);document.getElementById('loginBtn').textContent='👤 '+user;closeLogin()}
+if(user)document.getElementById('loginBtn').textContent='👤 '+user;
+render();renderPosts();
+</script></body></html>
